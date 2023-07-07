@@ -6,25 +6,20 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate alloc;
-use alloc::{format, vec::Vec};
-
-#[macro_use]
 extern crate pest;
-#[macro_use]
 extern crate pest_derive;
 
+use pest::Parser;
+use pest_derive::Parser;
+
 #[derive(Parser)]
-#[grammar_inline = "string = { \"abc\" }"]
-struct GrammarParser;
+#[grammar = "../tests/implicit.pest"]
+struct TestImplicitParser;
 
 #[test]
-fn inline_string() {
-    parses_to! {
-        parser: GrammarParser,
-        input: "abc",
-        rule: Rule::string,
-        tokens: [
-            string(0, 3)
-        ]
-    };
+fn test_implicit_whitespace() {
+    // this failed to parse due to a bug in the optimizer
+    // see: https://github.com/pest-parser/pest/issues/762#issuecomment-1375374868
+    let successful_parse = TestImplicitParser::parse(Rule::program, "a a");
+    assert!(successful_parse.is_ok());
 }
