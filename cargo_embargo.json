@@ -1,8 +1,0 @@
-{
-  "package": {
-    "pest_derive": {
-      "device_supported": false
-    }
-  },
-  "run_cargo": false
-}
